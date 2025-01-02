@@ -7,7 +7,7 @@ include "connection.php";
 
 //check jika sudah ada user yang login arahkan ke halaman admin
 if (isset($_SESSION['username'])) { 
-	header("location:admin.php"); 
+	header("location:index.php"); 
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
