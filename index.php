@@ -64,7 +64,7 @@
             <div class="d-sm-flex flex-sm-row-reverse align-items-center">
                 <img src="img/cr7.jpg" alt="" class="img-fluid" width="300">
                 <div class="txt">
-                    <h1 class="fw-bold display-4">Diary Journal </h1>
+                    <h1 class="fw-bold display-4">Diary Journal</h1>
                     <h4 class="lead display-6">Mencatat semua kegiatan sehari-hari yang ada tanpa terkecuali</h4>
                     <p> - Much Panji Laksono</p>
                 </div>
