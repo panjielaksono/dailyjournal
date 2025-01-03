@@ -7,6 +7,22 @@
         header("location:login.php");
         exit(); 
     }
+    
+
+    // Prepare and execute the query to get the profile picture by username
+    $stmt = $conn->prepare("SELECT foto FROM user WHERE username = ?");
+    $stmt->bind_param("s", $_SESSION['username']); // Use 's' for string data type since username is a string
+    $stmt->execute();
+    $result = $stmt->get_result();
+    
+    // Check if a result was returned
+    if ($result->num_rows > 0) {
+        $user = $result->fetch_assoc();
+        $foto = $user['foto']; // Assuming 'foto' is the column containing the image filename
+    } else {
+        $foto = 'default.jpg'; // If no image found, use a default image
+    }
+    $stmt->close();
 ?>
 
 <!doctype html>
@@ -25,7 +41,7 @@
 </head>
 
 <body>
-    <!-- ini navbar -->
+        <!-- Navbar -->
     <nav class="navbar navbar-expand-lg bg-body-tertiary sticky-top">
         <div class="container">
             <a class="navbar-brand" href="#">My Daily Journal</a>
@@ -50,8 +66,14 @@
                     <li class="nav-item">
                         <a class="nav-link text-dark" href="#profil">Profile</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" href="logout.php">Logout</a>
+                    <!-- Dropdown for user profile image and logout -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="img/<?= $user['foto'] ?>" alt="Profile Picture" class="rounded-circle" width="30" height="30">
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="logout.php">Logout</a></li>
+                        </ul>
                     </li>
                 </ul>
             </div>
@@ -112,30 +134,22 @@
             <h1 class="fw-bold display-4 pb-3">Gallery</h1>
             <div id="carouselExample" class="carousel slide">
                 <div class="carousel-inner">
-                    <div class="carousel-item active">
-                        <img src="img/badminton.jpg" class="d-block w-100" alt="">
-                    </div>
-                    <div class="carousel-item">
-                        <img src="img/cow.jpg" class="d-block w-100" alt="">
-                    </div>
-                    <div class="carousel-item">
-                        <img src="img/badminton1.jpg" class="d-block w-100" alt="">
-                    </div>
-                    <div class="carousel-item">
-                        <img src="img/diskrit.jpg" class="d-block w-100" alt="">
-                    </div>
-                    <div class="carousel-item">
-                        <img src="img/sapi.jpg" class="d-block w-100" alt="">
-                    </div>
-                    <div class="carousel-item">
-                        <img src="img/snowi.jpg" class="d-block w-100" alt="">
-                    </div>
-                    <div class="carousel-item">
-                        <img src="img/chill.jpg" class="d-block w-100" alt="">
-                    </div>
-                    <div class="carousel-item">
-                        <img src="img/hotwheels.jpg" class="d-block w-100" alt="">
-                    </div>
+                    <?php
+                    $sql = "SELECT * FROM gallery ORDER BY tanggal DESC";
+                    $hasil = $conn->query($sql); 
+                    $isActive = true; // Flag to check if it's the first item
+
+                    while($row = $hasil->fetch_assoc()){
+                        // Assign 'active' class only to the first item
+                        $activeClass = $isActive ? 'active' : '';
+                        $isActive = false; // After the first item, set it to false
+                    ?>
+                        <div class="carousel-item <?= $activeClass ?>">
+                            <img src="img/<?= $row['gambar'] ?>" class="d-block w-100" alt="<?= $row['alt'] ?>">
+                        </div>
+                    <?php
+                    }
+                    ?> 
                 </div>
                 <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample"
                     data-bs-slide="prev">
@@ -150,7 +164,7 @@
             </div>
         </div>
     </section>
-
+<!-- end of gallery -->
     <section id="schedule" class="text-center">
         <div class="container">
             <h1 class="fw-bold display-4 pb-3 mt-5">Jadwal Kuliah & Kegiatan Mahasiswa</h1>
