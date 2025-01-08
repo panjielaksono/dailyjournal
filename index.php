@@ -10,19 +10,22 @@
     
 
     // Prepare and execute the query to get the profile picture by username
-    $stmt = $conn->prepare("SELECT foto FROM user WHERE username = ?");
-    $stmt->bind_param("s", $_SESSION['username']); // Use 's' for string data type since username is a string
+    $stmt = $conn->prepare("SELECT foto, role FROM user WHERE username = ?");
+    $stmt->bind_param("s", $_SESSION['username']); 
     $stmt->execute();
     $result = $stmt->get_result();
     
     // Check if a result was returned
     if ($result->num_rows > 0) {
         $user = $result->fetch_assoc();
-        $foto = $user['foto']; // Assuming 'foto' is the column containing the image filename
+        $foto = $user['foto'];
+        $role = $user['role'];
     } else {
-        $foto = 'default.jpg'; // If no image found, use a default image
+        $foto = 'default.jpg'; 
+        $role = 'guest';
     }
     $stmt->close();
+
 ?>
 
 <!doctype html>
@@ -31,7 +34,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Latihan PHP</title>
+    <title>Panji Daily Journal</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <!-- CDN buat icon -->
@@ -42,7 +45,7 @@
 
 <body>
         <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg bg-body-tertiary sticky-top">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary sticky-top shadow-lg">
         <div class="container">
             <a class="navbar-brand" href="#">My Daily Journal</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -71,8 +74,15 @@
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <img src="img/<?= $user['foto'] ?>" alt="Profile Picture" class="rounded-circle" width="30" height="30">
                         </a>
+                        <!-- dropdown -->
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="logout.php">Logout</a></li>
+                            <!-- logic -->
+                            <?php if ($role === 'admin'): ?>
+                                <li><a class="dropdown-item" href="admin.php">Admin</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <?php endif; ?>
+                                <!-- logout -->
+                                <li><a class="dropdown-item" href="logout.php">Logout</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -81,14 +91,13 @@
     </nav>
 
     <!-- ini hero -->
-    <section id="hero" class="text-center p-5 bg-info-subtle text-sm-start">
+    <section id="hero" class="text-center p-5  text-sm-start" style="background-color: #074799;">
         <div class="container">
             <div class="d-sm-flex flex-sm-row-reverse align-items-center">
                 <img src="img/cr7.jpg" alt="" class="img-fluid" width="300">
                 <div class="txt">
-                    <h1 class="fw-bold display-4">Diary Journal</h1>
-                    <h4 class="lead display-6">Mencatat semua kegiatan sehari-hari yang ada tanpa terkecuali</h4>
-                    <p> - Much Panji Laksono</p>
+                    <h1 class="fw-bold display-4 text-light">Diary Journal</h1>
+                    <h4 class="lead display-6 text-light">Mencatat semua kegiatan sehari-hari yang ada tanpa terkecuali</h4>
                 </div>
             </div>
         </div>
@@ -129,9 +138,9 @@
 </section>
 <!-- article end -->
     <!-- ini gallery -->
-    <section id="gallery" class="text-center p-5 bg-info-subtle">
+    <section id="gallery" class="text-center p-5 " style="background-color: #074799;">
         <div class="container">
-            <h1 class="fw-bold display-4 pb-3">Gallery</h1>
+            <h1 class="fw-bold display-4 pb-3 text-light">Gallery</h1>
             <div id="carouselExample" class="carousel slide">
                 <div class="carousel-inner">
                     <?php
@@ -308,16 +317,16 @@
             </div>
         </section>
         <!-- ini footer -->
-        <footer class="text-center p-5">
+        <footer class="text-center p-3" style="background-color: #074799;">
             <div class="icon text-center">
                 <a href="https://www.instagram.com/_panjiil/" target="_blank" class="text-dark"><i
-                        class="bi bi-instagram h2 p-2 text-dark"></i></a>
+                        class="bi bi-instagram h2 p-2 text-light"></i></a>
                 <a href="https://www.youtube.com/@phucc69" target="_blank" class="text-dark"><i
-                        class="bi bi-youtube h2 p-2 text-dark"></i></a>
+                        class="bi bi-youtube h2 p-2 text-light"></i></a>
                 <a href="https://wa.me/6282314927363?text=olaamigos" target="_blank" class="text-dark"><i
-                        class="bi bi-whatsapp h2 p-2 text-dark"></i></a>
+                        class="bi bi-whatsapp h2 p-2 text-light"></i></a>
             </div>
-            <div class="copyright">Much Panji Laksono &copy 2024</div>
+            <div class="copyright text-light">Much Panji Laksono &copy 2024</div>
         </footer>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"

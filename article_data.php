@@ -1,5 +1,5 @@
             <table class="table table-hover">
-                <thead class="table-danger">
+                <thead class="table-primary">
                     <tr>
                         <th>No</th>
                         <th class="w-25">Judul</th>
@@ -13,7 +13,7 @@
                     include "connection.php";
 
                     $hlm = (isset($_POST['hlm'])) ? $_POST['hlm'] : 1;
-                    $limit = 3;
+                    $limit = 7;
                     $limit_start = ($hlm - 1) * $limit;
                     $no = $limit_start + 1;
 

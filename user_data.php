@@ -1,10 +1,10 @@
 <table class="table table-hover">
-    <thead class="table-danger">
+    <thead class="table-primary">
         <tr>
             <th>No</th>
             <th class="w-25">Username</th>
             <th class="w-25">Password</th>
-            <th class="w-25">Tanggal</th>
+            <th class="w-25">Role</th>
             <th class="w-25">Foto</th>
             <th class="w-25">Aksi</th>
         </tr>
@@ -21,25 +21,17 @@
         $sql = "SELECT * FROM user ORDER BY id DESC LIMIT $limit_start, $limit";
         $hasil = $conn->query($sql);
 
-        $no = $limit_start + 1;
         while ($row = $hasil->fetch_assoc()) {
         ?>
             <tr>
                 <td><?= $no++ ?></td>
-                <td>
-                    <?= $row["username"] ?>
-                </td>
-                <td>
-                    <?= $row["password"] ?>
-                </td>
-                <td>
-                    Tanggal dibuat : <br><?= $row["tanggal_dibuat"] ?>
-                    Tanggal modify : <br><?= $row["tanggal_modified"] ?>
-                </td>
+                <td><?= $row["username"] ?></td>
+                <td><?= $row["password"] ?></td>
+                <td><?= $row["role"] ?></td>
                 <td style="display: flex; justify-content: center; align-items: center;">
                     <?php
                     if ($row["foto"] != '') {
-                        if (file_exists('img/' . $row["foto"] . '')) {
+                        if (file_exists('img/' . $row["foto"])) {
                     ?>
                             <img src="img/<?= $row["foto"] ?>" height="100">
                     <?php
@@ -51,7 +43,7 @@
                     <a href="#" title="edit" class="badge rounded-pill text-bg-success" data-bs-toggle="modal" data-bs-target="#modalEdit<?= $row["id"] ?>"><i class="bi bi-pencil"></i></a>
                     <a href="#" title="delete" class="badge rounded-pill text-bg-danger" data-bs-toggle="modal" data-bs-target="#modalHapus<?= $row["id"] ?>"><i class="bi bi-x-circle"></i></a>
 
-                    <!-- Awal Modal Edit -->
+                    <!-- Modal Edit -->
                     <div class="modal fade" id="modalEdit<?= $row["id"] ?>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
@@ -64,12 +56,18 @@
                                         <div class="mb-3">
                                             <label for="formGroupExampleInput" class="form-label">Username</label>
                                             <input type="hidden" name="id" value="<?= $row["id"] ?>">
-                                            <input type="text" class="form-control" name="alt" placeholder="Tuliskan username" value="<?= $row["username"] ?>" required>
+                                            <input type="text" class="form-control" name="username" placeholder="Tuliskan username" value="<?= $row["username"] ?>" required>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="formGroupExampleInput" class="form-label">Password</label>
-                                            <input type="hidden" name="id" value="<?= $row["id"] ?>">
-                                            <input type="text" class="form-control" name="password" placeholder="Tuliskan password" value="<?= $row["password"] ?>" required>
+                                            <label for="formGroupExampleInput" class="form-label">Password Baru</label>
+                                            <input type="text" class="form-control" name="password" placeholder="Tuliskan password" value="<?= $row["password"] ?>">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="role" class="form-label">Role</label>
+                                            <select name="role" class="form-control" required>
+                                                <option value="guest" <?= $row['role'] == 'guest' ? 'selected' : '' ?>>Guest</option>
+                                                <option value="admin" <?= $row['role'] == 'admin' ? 'selected' : '' ?>>Admin</option>
+                                            </select>
                                         </div>
                                         <div class="mb-3">
                                             <label for="formGroupExampleInput2" class="form-label">Ganti Foto</label>
@@ -79,7 +77,7 @@
                                             <label for="formGroupExampleInput3" class="form-label">Foto Lama</label>
                                             <?php
                                             if ($row["foto"] != '') {
-                                                if (file_exists('img/' . $row["foto"] . '')) {
+                                                if (file_exists('img/' . $row["foto"])) {
                                             ?>
                                                     <br><img src="img/<?= $row["foto"] ?>" width="100">
                                             <?php
@@ -97,9 +95,8 @@
                             </div>
                         </div>
                     </div>
-                    <!-- Akhir Modal Edit -->
 
-                    <!-- Awal Modal Hapus -->
+                    <!-- Modal Hapus -->
                     <div class="modal fade" id="modalHapus<?= $row["id"] ?>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
@@ -110,20 +107,19 @@
                                 <form method="post" action="" enctype="multipart/form-data">
                                     <div class="modal-body">
                                         <div class="mb-3">
-                                            <label for="formGroupExampleInput" class="form-label">Yakin akan menghapus User "<strong><?= $row["alt"] ?></strong>"?</label>
+                                            <label for="formGroupExampleInput" class="form-label">Yakin akan menghapus User "<strong><?= $row["username"] ?></strong>"?</label>
                                             <input type="hidden" name="id" value="<?= $row["id"] ?>">
                                             <input type="hidden" name="foto" value="<?= $row["foto"] ?>">
                                         </div>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">batal</button>
-                                        <input type="submit" value="hapus" name="hapus" class="btn btn-primary">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                        <input type="submit" value="Hapus" name="hapus" class="btn btn-primary">
                                     </div>
                                 </form>
                             </div>
                         </div>
                     </div>
-                    <!-- Akhir Modal Hapus -->
                 </td>
             </tr>
         <?php
@@ -133,11 +129,11 @@
 </table>
 
 <?php 
-$sql1 = "SELECT * FROM user";
+$sql1 = "SELECT * FROM article";
 $hasil1 = $conn->query($sql1); 
 $total_records = $hasil1->num_rows;
 ?>
-<p>Total User : <?php echo $total_records; ?></p>
+<p>Total user : <?php echo $total_records; ?></p>
 <nav class="mb-2">
     <ul class="pagination justify-content-end">
     <?php

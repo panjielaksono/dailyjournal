@@ -1,10 +1,10 @@
             <table class="table table-hover">
-                <thead class="table-danger">
+                <thead class="table-primary">
                     <tr>
                         <th>No</th>
-                        <th class="w-25">Informasi</th>
-                        <th class="w-25">Gambar</th>
-                        <th class="w-25">Aksi</th>
+                        <th class="w-50">Informasi</th>
+                        <th class="">Gambar</th>
+                        <th class="">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -34,7 +34,7 @@
                                 if ($row["gambar"] != '') {
                                     if (file_exists('img/' . $row["gambar"] . '')) {
                                 ?>
-                                        <img src="img/<?= $row["gambar"] ?>" width="100">
+                                        <img src="img/<?= $row["gambar"] ?>" width="200" class="img-fluid">
                                 <?php
                                     }
                                 }
