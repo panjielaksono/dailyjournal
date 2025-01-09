@@ -1,12 +1,10 @@
 <?php
     session_start();
     include "connection.php";
-
-    //cek login
-    if (!isset($_SESSION['username'])) {
-        header("location:login.php");
-        exit(); 
-    }
+    
+    
+        $foto = 'default.jpg'; 
+        $role = 'guest';
     
 
     // Prepare and execute the query to get the profile picture by username
@@ -20,10 +18,7 @@
         $user = $result->fetch_assoc();
         $foto = $user['foto'];
         $role = $user['role'];
-    } else {
-        $foto = 'default.jpg'; 
-        $role = 'guest';
-    }
+    } 
     $stmt->close();
 
 ?>
@@ -69,22 +64,24 @@
                     <li class="nav-item">
                         <a class="nav-link text-dark" href="#profil">Profile</a>
                     </li>
-                    <!-- Dropdown for user profile image and logout -->
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="img/<?= $user['foto'] ?>" alt="Profile Picture" class="rounded-circle" width="30" height="30">
-                        </a>
-                        <!-- dropdown -->
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <!-- logic -->
-                            <?php if ($role === 'admin'): ?>
-                                <li><a class="dropdown-item" href="admin.php">Admin</a></li>
-                                <li><hr class="dropdown-divider"></li>
+                    <?php if (isset($_SESSION['username'])): ?>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <img src="img/<?= $foto ?>" alt="Profile Picture" class="rounded-circle" width="30" height="30">
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <?php if ($role === 'admin'): ?>
+                                    <li><a class="dropdown-item" href="admin.php">Admin</a></li>
+                                    <li><hr class="dropdown-divider"></li>
                                 <?php endif; ?>
-                                <!-- logout -->
                                 <li><a class="dropdown-item" href="logout.php">Logout</a></li>
-                        </ul>
-                    </li>
+                            </ul>
+                        </li>
+                    <?php else: ?>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" href="login.php">Login</a>
+                        </li>
+                    <?php endif; ?>
                 </ul>
             </div>
         </div>

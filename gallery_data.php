@@ -34,7 +34,7 @@
                                 if ($row["gambar"] != '') {
                                     if (file_exists('img/' . $row["gambar"] . '')) {
                                 ?>
-                                        <img src="img/<?= $row["gambar"] ?>" width="200" class="img-fluid">
+                                        <img src="img/<?= $row["gambar"] ?>" width="200" class="img-fluid" alt="<?= $row["alt"] ?>">
                                 <?php
                                     }
                                 }

@@ -5,17 +5,15 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 
 // Include the database connection file
-include "connection.php";  // Ensure the correct path to connection.php
-
-include "upload_foto.php";  // Assuming this handles file uploads
-
+include "connection.php";  
+include "upload_foto.php"; 
 // Check if the 'simpan' button was clicked (for saving data)
 if (isset($_POST['simpan'])) {
     // Get form data
     $judul = $_POST['judul'];
     $isi = $_POST['isi'];
     $tanggal = date("Y-m-d H:i:s");
-    $username = $_SESSION['username'];  // Get the logged-in user's username
+    $username = $_SESSION['username'];  
     $gambar = '';
     $nama_gambar = $_FILES['gambar']['name'];
 
